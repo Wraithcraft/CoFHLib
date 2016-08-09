@@ -6,33 +6,32 @@ import cofh.lib.gui.element.tab.TabBase;
 import cofh.lib.gui.slot.SlotFalseCopy;
 import cofh.lib.util.helpers.RenderHelper;
 import cofh.lib.util.helpers.StringHelper;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.audio.SoundHandler;
+import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.VertexBuffer;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.renderer.texture.TextureMap;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.inventory.ClickType;
+import net.minecraft.inventory.Container;
+import net.minecraft.inventory.Slot;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.translation.I18n;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fml.client.FMLClientHandler;
+import org.lwjgl.input.Mouse;
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL12;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.audio.SoundHandler;
-import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.gui.inventory.GuiContainer;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.WorldRenderer;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.renderer.texture.TextureMap;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.inventory.Container;
-import net.minecraft.inventory.Slot;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.StatCollector;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fml.client.FMLClientHandler;
-
-import org.lwjgl.input.Mouse;
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL12;
 
 /**
  * Base class for a modular GUIs. Works with Elements {@link ElementBase} and Tabs {@link TabBase} which are both modular elements.
@@ -107,7 +106,7 @@ public abstract class GuiBase extends GuiContainer {
 			fontRendererObj.drawString(StringHelper.localize(name), getCenteredOffset(StringHelper.localize(name)), 6, 0x404040);
 		}
 		if (drawInventory) {
-			fontRendererObj.drawString(StatCollector.translateToLocal("container.inventory"), 8, ySize - 96 + 3, 0x404040);
+			fontRendererObj.drawString(I18n.translateToLocal("container.inventory"), 8, ySize - 96 + 3, 0x404040);
 		}
 		drawElements(0, true);
 		drawTabs(0, true);
@@ -251,7 +250,8 @@ public abstract class GuiBase extends GuiContainer {
 		if (dragSplitting && slot != null && itemstack != null && slot instanceof SlotFalseCopy) {
 			if (lastIndex != slot.slotNumber) {
 				lastIndex = slot.slotNumber;
-				handleMouseClick(slot, slot.slotNumber, 0, 0);
+				//TODO change if needed
+				handleMouseClick(slot, slot.slotNumber, 0, ClickType.PICKUP);
 			}
 		} else {
 			lastIndex = -1;
@@ -514,7 +514,8 @@ public abstract class GuiBase extends GuiContainer {
 		itemRender.renderItemAndEffectIntoGUI(stack, x, y);
 
 		if (drawOverlay) {
-			itemRender.renderItemOverlayIntoGUI(font, stack, x, y - (draggedStack == null ? 0 : 8), overlayTxt);
+			//TODO AT to get draggedStack
+//			itemRender.renderItemOverlayIntoGUI(font, stack, x, y - (draggedStack == null ? 0 : 8), overlayTxt);
 		}
 		zLevel = 0.0F;
 		itemRender.zLevel = 0.0F;
@@ -530,7 +531,7 @@ public abstract class GuiBase extends GuiContainer {
 		if (fluid == null || fluid.getFluid() == null) {
 			return;
 		}
-		bindTexture(TextureMap.locationBlocksTexture);
+		bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
 		RenderHelper.setColor3ub(fluid.getFluid().getColor(fluid));
 
 		drawTiledTexture(x, y, Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(fluid.getFluid().getStill().toString()), width, height);
@@ -580,7 +581,7 @@ public abstract class GuiBase extends GuiContainer {
 		GL11.glColor4f(r, g, b, a);
 
 		Tessellator tessellator = Tessellator.getInstance();
-		WorldRenderer worldrenderer = tessellator.getWorldRenderer();
+		VertexBuffer worldrenderer = tessellator.getBuffer();
 		worldrenderer.begin(7, DefaultVertexFormats.POSITION);
 		worldrenderer.pos(x1, y2, zLevel).endVertex();
 		worldrenderer.pos(x2, y2, zLevel).endVertex();
@@ -616,7 +617,7 @@ public abstract class GuiBase extends GuiContainer {
 		GL11.glColor4f(r, g, b, a);
 
 		Tessellator tessellator = Tessellator.getInstance();
-		WorldRenderer worldrenderer = tessellator.getWorldRenderer();
+		VertexBuffer worldrenderer = tessellator.getBuffer();
 		worldrenderer.begin(7, DefaultVertexFormats.POSITION);
 		worldrenderer.pos(x1, y2, zLevel).endVertex();
 		worldrenderer.pos(x2, y2, zLevel).endVertex();
@@ -633,7 +634,7 @@ public abstract class GuiBase extends GuiContainer {
 		float texV = 1 / texH;
 
 		Tessellator tessellator = Tessellator.getInstance();
-		WorldRenderer worldrenderer = tessellator.getWorldRenderer();
+		VertexBuffer worldrenderer = tessellator.getBuffer();
 		worldrenderer.begin(7, DefaultVertexFormats.POSITION_TEX);
 		worldrenderer.pos(x + 0, y + height, zLevel).tex((u + 0) * texU, (v + height) * texV).endVertex();
 		worldrenderer.pos(x + width, y + height, zLevel).tex((u + width) * texU, (v + height) * texV).endVertex();
@@ -653,7 +654,7 @@ public abstract class GuiBase extends GuiContainer {
 		double maxV = icon.getMaxV();
 
 		Tessellator tessellator = Tessellator.getInstance();
-		WorldRenderer worldrenderer = tessellator.getWorldRenderer();
+		VertexBuffer worldrenderer = tessellator.getBuffer();
 		worldrenderer.begin(7, DefaultVertexFormats.POSITION_TEX);
 		worldrenderer.pos(x + 0, y + height, zLevel).tex(minU, minV + (maxV - minV) * height / 16F);
 		worldrenderer.pos(x + width, y + height, zLevel).tex(minU + (maxU - minU) * width / 16F, minV + (maxV - minV) * height / 16F);

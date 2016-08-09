@@ -1,16 +1,15 @@
 package cofh.lib.gui.element;
 
-import static org.lwjgl.opengl.GL11.*;
-
 import cofh.lib.gui.GuiBase;
+import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.VertexBuffer;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.util.ResourceLocation;
 
 import java.util.List;
 
-import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.WorldRenderer;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.util.ResourceLocation;
+import static org.lwjgl.opengl.GL11.*;
 
 /**
  * Base class for a modular GUI element. Has self-contained rendering methods and a link back to the {@link GuiBase} it is a part of.
@@ -138,7 +137,7 @@ public abstract class ElementBase {
 		glClear(GL_STENCIL_BUFFER_BIT);
 
 		Tessellator tessellator = Tessellator.getInstance();
-		WorldRenderer worldrenderer = tessellator.getWorldRenderer();
+		VertexBuffer worldrenderer = tessellator.getBuffer();
 		worldrenderer.begin(7, DefaultVertexFormats.POSITION);
 		worldrenderer.pos(x1, y2, 0.0D).endVertex();
 		worldrenderer.pos(x2, y2, 0.0D).endVertex();

@@ -1,13 +1,13 @@
 package cofh.lib.util.helpers;
 
-import java.awt.Color;
-import java.util.ArrayList;
-import java.util.List;
-
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+
+import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Contains helper functions to assist with working with fireworks.
@@ -221,7 +221,7 @@ public final class FireworksHelper {
 			NBTTagCompound explosionTag = this.getTagCompound();
 			tags.setTag("Explosion", explosionTag);
 
-			ItemStack stack = new ItemStack(Items.firework_charge);
+			ItemStack stack = new ItemStack(Items.FIREWORK_CHARGE);
 			stack.setTagCompound(tags);
 			return stack;
 		}
@@ -256,7 +256,7 @@ public final class FireworksHelper {
 		fireworksTag.setTag("Explosions", explosionsList);
 		tags.setTag("Fireworks", fireworksTag);
 
-		ItemStack stack = new ItemStack(Items.fireworks);
+		ItemStack stack = new ItemStack(Items.FIREWORKS);
 		stack.setTagCompound(tags);
 		return stack;
 	}

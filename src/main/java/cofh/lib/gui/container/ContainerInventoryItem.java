@@ -2,7 +2,10 @@ package cofh.lib.gui.container;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.inventory.ClickType;
 import net.minecraft.item.ItemStack;
+
+import javax.annotation.Nullable;
 
 public abstract class ContainerInventoryItem extends ContainerBase {
 
@@ -76,13 +79,14 @@ public abstract class ContainerInventoryItem extends ContainerBase {
 		return mergeItemStack(stack, 0, invFull, true);
 	}
 
+	@Nullable
 	@Override
-	public ItemStack slotClick(int slotId, int clickedButton, int mode, EntityPlayer player) {
+	public ItemStack slotClick(int slotId, int dragType, ClickType clickTypeIn, EntityPlayer player) {
 
-		if (mode == 2 && clickedButton == containerIndex) {
+		if (clickTypeIn == ClickType.PICKUP && slotId== containerIndex) {
 			return null;
 		}
-		return super.slotClick(slotId, clickedButton, mode, player);
+		return super.slotClick(slotId, dragType, clickTypeIn, player);
 	}
 
 }

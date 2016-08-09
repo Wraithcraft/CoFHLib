@@ -35,7 +35,7 @@ public class SoundLocation extends SoundBase implements ITickableSound {
 	public SoundLocation(ISoundSource source, ResourceLocation sound, float volume, float pitch, boolean repeat, int repeatDelay, double x, double y, double z,
 			AttenuationType attenuation) {
 
-		super(sound, volume, pitch, repeat, repeatDelay, x, y, z, attenuation);
+		super(sound.toString(), volume, pitch, repeat, repeatDelay, x, y, z, attenuation);
 		this.source = source;
 		this.baseVolume = volume;
 	}

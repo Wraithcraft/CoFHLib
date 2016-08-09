@@ -6,15 +6,13 @@ import cofh.lib.gui.GuiBase;
 import cofh.lib.gui.GuiProps;
 import cofh.lib.util.helpers.BlockHelper;
 import cofh.lib.util.helpers.StringHelper;
-
-import java.util.List;
-
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
-
 import org.lwjgl.opengl.GL11;
+
+import java.util.List;
 
 public class TabConfiguration extends TabBase {
 
@@ -119,7 +117,7 @@ public class TabConfiguration extends TabBase {
 		getFontRenderer().drawStringWithShadow(StringHelper.localize("info.cofh.configuration"), sideOffset() + 18, 6, headerColor);
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 
-		gui.bindTexture(TextureMap.locationBlocksTexture);
+		gui.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
 
 		GL11.glEnable(GL11.GL_BLEND);
 		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
